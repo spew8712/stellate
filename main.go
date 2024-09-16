@@ -22,18 +22,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	startSystray, stopSystray := systray.RunWithExternalLoop(func() {
-		iconBytes, err := os.ReadFile("icon.ico")
-		if err != nil {
-			log.Fatal(err)
-		}
-		systray.SetIcon(iconBytes)
-		systray.SetTooltip("Stellate")
-		systray.SetTitle("Stellate")
-	}, func() {})
-	startSystray()
-	go setupSystray()
-	defer stopSystray()
+	
 
 	/*
 		Setting `FlagWindowHidden` before `InitWindow()` so that the window doesn't flashes (appears then quickly hides itself on start)
@@ -118,15 +107,6 @@ func main() {
 	}
 }
 
-func setupSystray() {
-	name := systray.AddMenuItem("Stellate", "")
-	name.Disable()
-	systray.AddSeparator()
-	exit := systray.AddMenuItem("Exit", "")
-
-	<-exit.ClickedCh
-	quit = true
-}
 
 func registerHotkeys(brightnessCommandChan chan<- BrightnessCommand) {
 	evChan := hook.Start()
